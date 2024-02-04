@@ -1,0 +1,69 @@
+{
+  "format": 1,
+  "restore": {
+    "A:\\Seadrive Cache\\coypunkt\\My Libraries\\University\\Year 3\\CI601\\Work\\ALViN\\ALViN.csproj": {}
+  },
+  "projects": {
+    "A:\\Seadrive Cache\\coypunkt\\My Libraries\\University\\Year 3\\CI601\\Work\\ALViN\\ALViN.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "A:\\Seadrive Cache\\coypunkt\\My Libraries\\University\\Year 3\\CI601\\Work\\ALViN\\ALViN.csproj",
+        "projectName": "ALViN",
+        "projectPath": "A:\\Seadrive Cache\\coypunkt\\My Libraries\\University\\Year 3\\CI601\\Work\\ALViN\\ALViN.csproj",
+        "packagesPath": "C:\\Users\\Caine\\.nuget\\packages\\",
+        "outputPath": "A:\\Seadrive Cache\\coypunkt\\My Libraries\\University\\Year 3\\CI601\\Work\\ALViN\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Users\\Caine\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Caine\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Caine\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.101\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
