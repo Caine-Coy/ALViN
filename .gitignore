@@ -1,5 +1,3 @@
 .vscode
 bin
-obj/Debug/
-
-obj/Debug/net8.0/project.razor.vscode.bin
+obj/Debug
