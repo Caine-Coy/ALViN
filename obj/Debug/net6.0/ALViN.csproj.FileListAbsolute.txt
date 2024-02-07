@@ -25,3 +25,35 @@ A:\Seadrive Cache\coypunkt\My Libraries\University\Year 3\CI601\Work\ALViN\obj\D
 A:\Seadrive Cache\coypunkt\My Libraries\University\Year 3\CI601\Work\ALViN\obj\Debug\net6.0\ALViN.dll
 A:\Seadrive Cache\coypunkt\My Libraries\University\Year 3\CI601\Work\ALViN\obj\Debug\net6.0\ref\ALViN.dll
 A:\Seadrive Cache\coypunkt\My Libraries\University\Year 3\CI601\Work\ALViN\obj\Debug\net6.0\ALViN.genruntimeconfig.cache
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.GeneratedMSBuildEditorConfig.editorconfig
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.AssemblyInfoInputs.cache
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.AssemblyInfo.cs
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.csproj.CoreCompileInputs.cache
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.MvcApplicationPartsAssemblyInfo.cache
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.RazorAssemblyInfo.cache
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.RazorAssemblyInfo.cs
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.sourcelink.json
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.dll
+D:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.pdb
+d:\Uni\Ci601\ALViN\bin\Debug\net6.0\appsettings.Development.json
+d:\Uni\Ci601\ALViN\bin\Debug\net6.0\appsettings.json
+d:\Uni\Ci601\ALViN\bin\Debug\net6.0\ALViN.staticwebassets.runtime.json
+d:\Uni\Ci601\ALViN\bin\Debug\net6.0\ALViN.exe
+d:\Uni\Ci601\ALViN\bin\Debug\net6.0\ALViN.deps.json
+d:\Uni\Ci601\ALViN\bin\Debug\net6.0\ALViN.runtimeconfig.json
+d:\Uni\Ci601\ALViN\bin\Debug\net6.0\ALViN.dll
+d:\Uni\Ci601\ALViN\bin\Debug\net6.0\ALViN.pdb
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\staticwebassets.build.json
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\staticwebassets.development.json
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\staticwebassets\msbuild.ALViN.Microsoft.AspNetCore.StaticWebAssets.props
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\staticwebassets\msbuild.build.ALViN.props
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\staticwebassets\msbuild.buildMultiTargeting.ALViN.props
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\staticwebassets\msbuild.buildTransitive.ALViN.props
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\staticwebassets.pack.json
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\scopedcss\Shared\MainLayout.razor.rz.scp.css
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\scopedcss\Shared\NavMenu.razor.rz.scp.css
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\scopedcss\bundle\ALViN.styles.css
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\scopedcss\projectbundle\ALViN.bundle.scp.css
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\refint\ALViN.dll
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\ALViN.genruntimeconfig.cache
+d:\Uni\Ci601\ALViN\obj\Debug\net6.0\ref\ALViN.dll

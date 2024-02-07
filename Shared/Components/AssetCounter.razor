@@ -1,10 +1,8 @@
 <div class="alert alert-secondary mt-4">
-    <span class="oi oi-pencil me-2" aria-hidden="true"></span>
-    <strong>There are currently @Title laptops out of @Title visible </strong>
+    <span class="oi oi-pencil me-2" aria-hidden="true">@detectedDevices devices found out of @totalDevices</span>
 </div>
 
 @code {
-    private int totalLaptops = LaptopHandler.getLaptopAmount();
-    public int detectedLaptops;
-    private int laptop
+    private int totalDevices = DeviceHandler.getTotalDeviceAmount();
+    public int detectedDevices = DeviceHandler.getCurrentDevices();
 }

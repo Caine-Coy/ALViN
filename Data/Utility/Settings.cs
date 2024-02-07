@@ -54,7 +54,7 @@ public static class Settings
             }
         }
         else{
-            Logger.Error(logName,"Setting Not Found!");
+            Logger.Error(logName,"Setting " + setting + " Not Found!");
         }
         return 0;
     }

@@ -9,14 +9,18 @@ public static class Logger
 {
     private static readonly string logName = "Logger";
     private static int verbosity;
+    private static bool isStarted = false;
     private static Stack<String> log = new();
 
     public static void Startup(){
-        verbosity = Settings.GetIntSetting("Verbosity");
+        isStarted = true;
+        verbosity = Settings.GetIntSetting("LoggerVerbosity");
         Log(logName,"Logger starting.");
+        
     }
 
     public static void Log(String callingObject,string msg){
+        if (!isStarted) Startup();
         composeMessage(callingObject,msg,2);
     }
 
@@ -29,9 +33,10 @@ public static class Logger
     }
 
     private static void composeMessage(String callingObject,string msg, int msgVerbosity){
-        string message = DateTime.Now.ToString() + " : " +callingObject.ToString() + ":" + msg;
+        string message = DateTime.Now.ToString() + " : " +callingObject.ToString() + " : " + msg;
         if (msgVerbosity <= verbosity){
             log.Push(message);
+            Console.WriteLine(message);
         }
     }
 

@@ -11,14 +11,6 @@ public static class DeviceHandler
     private static TimeSpan timeSinceSeenCutoff;
     private static List<Device> devices = LoadDevices();
     private static List<Device> recentDevices = CompileRecentDevices();
-    static void startup(){
-        LoadDevices();
-        CompileRecentDevices();
-    }
-
-    public static void Startup(){
-
-    }
 
     public static void checkSettings(){
         var timeCutoff = Settings.GetIntSetting("TimeSinceSeenCutoff");
@@ -34,9 +26,9 @@ public static class DeviceHandler
 
     private static List<Device> CompileRecentDevices()
       {
-        recentDevices.Clear();
+        recentDevices = new List<Device>();
         DateTime now = DateTime.Now;
-        int timeCutoffInt = Settings.GetIntSetting("timeSinceSeenCutoff");
+        int timeCutoffInt = Settings.GetIntSetting("TimeSinceSeenCutoff");
         DateTime timeCutoff = now.Subtract(TimeSpan.FromMinutes(timeCutoffInt));
         foreach (Device device in devices){
             if (device.LastDetected > now.Subtract(timeSinceSeenCutoff)){
@@ -47,7 +39,15 @@ public static class DeviceHandler
         return recentDevices;
     }
 
-    public static int getTotalDeviceAmount() { return devices.Count; }
+    public static int getTotalDeviceAmount(){
+        devices = LoadDevices();
+        return devices.Count;
+    } 
+
+    public static int getCurrentDevices(){
+        recentDevices = CompileRecentDevices();
+        return recentDevices.Count;
+    }
 
 
 }
