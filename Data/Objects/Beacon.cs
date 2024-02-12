@@ -1,5 +1,9 @@
 namespace ALViN.Data.Objects;
+using System.Xml;
+using System.Xml.Serialization;
 
+[XmlRootAttribute("PurchaseOrder",
+IsNullable = false)]
 public class Beacon
 {
     private Guid uuid;
@@ -11,7 +15,10 @@ public class Beacon
 
     Beacon(Guid uuid,string name){
         this.uuid = uuid;
+
         this.name = name;
         localDevices = new();
     }
+
+
 }
