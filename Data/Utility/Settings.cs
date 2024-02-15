@@ -22,11 +22,12 @@ public static class Settings
             {"LoggerVerbosity",2},
 
             //Storage
+            {"DatabaseLocation","http://127.0.0.1:8090"},
             
 
             //Scanning
             //detection Time in minutes past you consider a device inactive
-            {"TimeSinceSeenCutoff",30}
+            {"TimeSinceSeenCutoff",30},
         };
         return settings;
     }
@@ -42,7 +43,6 @@ public static class Settings
 
         return List;
     }
-
     public static int GetIntSetting(string setting){
         if (List.ContainsKey(setting)){
             var result = List[setting];
@@ -57,6 +57,21 @@ public static class Settings
             Logger.Error(logName,"Setting " + setting + " Not Found!");
         }
         return 0;
+    }
+    public static string GetSetting(string setting){
+        if (List.ContainsKey(setting)){
+            var result = List[setting];
+            if (result != null){
+                return (string)result;
+            }
+            else{
+                Logger.Error(logName,"Incorrect Setting Value!");
+            }
+        }
+        else{
+            Logger.Error(logName,"Setting " + setting + " Not Found!");
+        }
+        return "";
     }
 
     static void SaveSettings(){
