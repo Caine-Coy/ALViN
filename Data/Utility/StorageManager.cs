@@ -18,25 +18,33 @@ public static class StorageManager
     {
         if (!isConnected){
             isConnected = true;
-            database = new(databaseLocation.ToString());
-            var test = database.Collections("devices").GetFullList();
-            Console.WriteLine(test.Result);
+            database = new(databaseLocation.ToString()); 
             Logger.Log(logName,"Connected to database @ " + databaseLocation.ToString());
         }
     }
     private static void Disconnect()
     {
 
-    }
+    }       
 
-    private static List<Device> decodeDevices(){
+    private async static Task<List<Device>> decodeDevices(){
 
+        string deviceBlob;
+            try{
+                deviceBlob = await database.Collections("devices").GetFullList();
+            }
+            catch(Exception e){
+                return [];
+            }
+
+        Console.WriteLine(deviceBlob);
         List<Device> devices = [];
         return devices;
     }
 
     public static List<Device> GetDevices(){
         Task.Run(() => Connect());
+        Task.Run(() => decodeDevices());
         //var test = database.Collections("devices").GetFullList().Result;
         return new();
     }
