@@ -12,11 +12,12 @@ public static class StorageManager
     private static bool isConnected = false;
     //Database Manager Singleton
     //Make Configurable
-    public static String databaseLocation = new(Settings.GetSetting("DatabaseLocation"));
+    public static String databaseLocation;
 
 
     private static void Connect()
     {
+        databaseLocation = new(Settings.GetSetting("DatabaseLocation"));
         using (var db = new LiteDatabase(databaseLocation)){
             var collection = db.GetCollection<Device>("Devices");
             if (collection.FindOne("Name=Test") != null){
