@@ -2,9 +2,9 @@ namespace ALViN.Data.Utility;
 
 using System.Collections;
 using ALViN.Data.Objects;
+using LiteDB;
 using Microsoft.Extensions.WebEncoders.Testing;
 using Microsoft.VisualBasic;
-using pocketbase.net;
 
 public static class StorageManager
 {
@@ -12,13 +12,25 @@ public static class StorageManager
     private static bool isConnected = false;
     //Database Manager Singleton
     //Make Configurable
-    public static Uri databaseLocation = new(Settings.GetSetting("DatabaseLocation"));
-    public static Pocketbase database = new(databaseLocation.ToString());
-    private static async Task Connect()
+    public static String databaseLocation = new(Settings.GetSetting("DatabaseLocation"));
+
+
+    private static void Connect()
     {
+        using (var db = new LiteDatabase(databaseLocation)){
+            var collection = db.GetCollection<Device>("Devices");
+            if (collection.FindOne("Name=Test") != null){
+                var device = new Device{
+                Name = "Test",
+                LastUuid = Guid.Empty,
+                LastDetected = DateAndTime.Now,
+                };
+                collection.Insert(device);
+            };
+            
+        }
         if (!isConnected){
             isConnected = true;
-            database = new(databaseLocation.ToString()); 
             Logger.Log(logName,"Connected to database @ " + databaseLocation.ToString());
         }
     }
@@ -26,25 +38,8 @@ public static class StorageManager
     {
 
     }       
-
-    private async static Task<List<Device>> decodeDevices(){
-
-        string deviceBlob;
-            try{
-                deviceBlob = await database.Collections("devices").GetFullList();
-            }
-            catch(Exception e){
-                return [];
-            }
-
-        Console.WriteLine(deviceBlob);
-        List<Device> devices = [];
-        return devices;
-    }
-
     public static List<Device> GetDevices(){
-        Task.Run(() => Connect());
-        Task.Run(() => decodeDevices());
+        Connect();
         //var test = database.Collections("devices").GetFullList().Result;
         return new();
     }

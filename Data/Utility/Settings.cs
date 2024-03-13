@@ -10,6 +10,7 @@ public static class Settings
 {
     readonly static bool debug = true;
     private static readonly string logName = "Settings";
+    private static String LocalDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
     private static Hashtable List = LoadSettings();
     
     static int TimeSinceLastSeen;
@@ -22,7 +23,7 @@ public static class Settings
             {"LoggerVerbosity",2},
 
             //Storage
-            {"DatabaseLocation","http://127.0.0.1:8090"},
+            {"DatabaseLocation",@"Database.db"},
             
 
             //Scanning
@@ -62,6 +63,13 @@ public static class Settings
         if (List.ContainsKey(setting)){
             var result = List[setting];
             if (result != null){
+                switch(setting){
+                case "DatabaseLocation":
+                    result = LocalDirectory += result;
+                    break;
+                default:
+                    break;
+                }
                 return (string)result;
             }
             else{
