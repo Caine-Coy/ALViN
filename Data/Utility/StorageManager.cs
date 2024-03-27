@@ -19,39 +19,49 @@ public static class StorageManager
         if (database == null)
         {
             databaseLocation = Directory.GetCurrentDirectory() + Settings.GetSetting("DatabaseLocation");
-            string connectionString = $@"Filename={databaseLocation};Mode=Shared";
+            string connectionString = $@"Filename={databaseLocation};Connection=Shared";
             database = new LiteDatabase(connectionString);
             Logger.Log(logName, $@"Database Connection Initialized. Database at {databaseLocation}.");
+            InitDatabase();
         }
     }
 
     private static void InitDatabase()
     {
         EnsureDatabaseConnection();
-
+         var beaconCollection = database.GetCollection<Beacon>("Beacons");
+         var deviceCollection = database.GetCollection<Device>("Devices");
         if (Settings.GetBoolSetting("Debug"))
         {
-            var collection = database.GetCollection<Device>("Devices");
-
-            if (!collection.Exists(x => x.Name == "Test"))
+            if (!beaconCollection.Exists(x => x.Name == "Test")){
+                var beacon = new Beacon
+                {
+                    Name = "Test",
+                    Uuid = Guid.Empty,
+                };
+                beaconCollection.Insert(beacon);
+                Logger.Log(logName,$@"Added new test beacon to beacon collection at {databaseLocation}");
+            if (!deviceCollection.Exists(x => x.Name == "Test"))
             {
                 var device = new Device
                 {
                     Name = "Test",
                     LastUuid = Guid.Empty,
                     LastDetected = DateTime.Now,
+                    LastBeacon = beacon,
                 };
-                collection.Insert(device);
-                Logger.Log(logName, "Added new test device to base at " + databaseLocation);
+                deviceCollection.Insert(device);
+                Logger.Log(logName, $@"Added new test device to device collection at {databaseLocation}");
             };
+            }
 
-            var _testDevices = collection.Find(x => x.Name == "Test").ToList();
+            var _testDevices = deviceCollection.Find(x => x.Name == "Test").ToList();
             foreach (Device device in _testDevices)
 
             {
                 device.LastDetected = DateTime.Now;
                 Logger.Log(logName, "Updated Test Device " + device.Name + " To Time " + device.LastDetected);
-                collection.Update(device);
+                deviceCollection.Update(device);
             }
         }
     }
@@ -59,9 +69,8 @@ public static class StorageManager
 public static List<Device> GetDevices()
 {
     EnsureDatabaseConnection();
-    var collection = database.GetCollection<Device>("Devices");
-    devices = collection.FindAll().ToList();
-    
+    var deviceCollection = database.GetCollection<Device>("Devices");
+    devices = deviceCollection.FindAll().ToList();
     return devices;
 }
 

@@ -6,6 +6,7 @@ public class Device
     public string? Name {get; set;} 
     public Guid LastUuid {get; set;}
     public DateTime LastDetected {get; set;}
+    public Beacon? LastBeacon{get; set;}
     public Device(){
 
     }

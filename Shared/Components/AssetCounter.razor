@@ -1,9 +1,23 @@
 <div class="alert alert-secondary mt-4">
-    <span class="oi oi-pencil me-2" aria-hidden="true">@detectedDevices devices found out of @totalDevices total devices</span>
+    <span class="oi oi-pencil me-2" aria-hidden="true">@detectedDevices.Count devices found out of @totalDevices.Count total devices</span>
 </div>
 
+<table class = "DeviceList">
+    <thead>
+        <tr>
+            <th>Device</th>
+            <th>Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var device in totalDevices){
+            <td>@device.Name</td>
+            <td>@device.LastBeacon.Name</td>
+        }
+    </tbody>
+</table>
 
 @code {
-    private int totalDevices = DeviceHandler.getTotalDeviceAmount();
-    public int detectedDevices = DeviceHandler.getCurrentDevices();
+    private List<Device> totalDevices = DeviceHandler.GetAllDevices();
+    public List<Device> detectedDevices = DeviceHandler.GetCurrentDevices();
 }

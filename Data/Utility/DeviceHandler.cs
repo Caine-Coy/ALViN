@@ -39,14 +39,14 @@ public static class DeviceHandler
         return recentDevices;
     }
 
-    public static int getTotalDeviceAmount(){
+    public static List<Device> GetAllDevices(){
         devices = LoadDevices();
-        return devices.Count;
+        return devices;
     } 
 
-    public static int getCurrentDevices(){
+    public static List<Device> GetCurrentDevices(){
         recentDevices = CompileRecentDevices();
-        return recentDevices.Count;
+        return recentDevices;
     }
 
 
