@@ -12,7 +12,7 @@ public static class DeviceHandler
     private static List<Device> devices = LoadDevices();
     private static List<Device> recentDevices = CompileRecentDevices();
 
-    public static void checkSettings(){
+    public static void CheckSettings(){
         var timeCutoff = Settings.GetIntSetting("TimeSinceSeenCutoff");
         //Makes new Timespan of 0, hours, minutes from the settings, and 0 seconds.
         timeSinceSeenCutoff = new(0,timeCutoff,0);
@@ -20,22 +20,22 @@ public static class DeviceHandler
 
     private static List<Device> LoadDevices()
       {
-        Logger.Log(logName,"Loading device list from storage.");
         return StorageManager.GetDevices();
      }
 
     private static List<Device> CompileRecentDevices()
       {
-        recentDevices = new List<Device>();
+        recentDevices = LoadDevices();
         DateTime now = DateTime.Now;
         int timeCutoffInt = Settings.GetIntSetting("TimeSinceSeenCutoff");
         DateTime timeCutoff = now.Subtract(TimeSpan.FromMinutes(timeCutoffInt));
+
         foreach (Device device in devices){
             if (device.LastDetected > now.Subtract(timeSinceSeenCutoff)){
                 recentDevices.Add(device);
             }
         }
-        Logger.Log(logName,"Found " + recentDevices.Count + " tracked within the last " + timeCutoffInt + " Minutes.");
+        Logger.Log(logName,$@"Found {recentDevices.Count} tracked within the last {timeCutoffInt} Minutes.");
         return recentDevices;
     }
 

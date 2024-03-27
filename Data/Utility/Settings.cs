@@ -20,6 +20,7 @@ public static class Settings
             //Generic
             //0-2 Verbosity. 2: Logs, 1: Warns, 0 Errors.
             {"LoggerVerbosity",2},
+            {"Debug",true},
 
             //Storage
             {"DatabaseLocation",@"\ALViNDatabase.db"},
@@ -72,6 +73,21 @@ public static class Settings
             Logger.Error(logName,"Setting " + setting + " Not Found!");
         }
         return "";
+    }
+        public static bool GetBoolSetting(string setting){
+        if (List.ContainsKey(setting)){
+            bool? result = (bool)List[setting];
+            if (result == null){
+                Logger.Error(logName,"Setting "+ setting + " Malformed! Expected Bool Got "+ List[setting]+ ". Returning False.");
+                return false;
+            }
+            return (bool)result;
+        }
+        else{
+            Logger.Error(logName,"Setting " + setting + " Not Found!");
+            return false;
+        }
+       
     }
 
     static void SaveSettings(){
