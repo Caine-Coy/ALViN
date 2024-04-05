@@ -1,0 +1,28 @@
+@inject HttpClient Http
+
+    <table class = "DeviceList">
+    <thead>
+        <tr>
+            <th>Device</th>
+            <th>Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var device in devices){
+            <td>@device.Name</td>
+            <td>@device.LastBeacon.Name</td>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private List<Device> devices;
+    private static readonly string logName = "DatabaseEndpointComponent";
+
+    protected override async Task OnInitializedAsync()
+    {
+        devices = await Http.GetFromJsonAsync<List<Device>>("api/devices");
+        Logger.Log(logName,$"Got devices from endpoint, {devices.ToArray().ToString()}");
+    }
+}

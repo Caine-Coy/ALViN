@@ -1,7 +1,8 @@
+@inject HttpClient Http
+
 <div class="alert alert-secondary mt-4">
     <span class="oi oi-pencil me-2" aria-hidden="true">@detectedDevices.Count devices found out of @totalDevices.Count total devices</span>
 </div>
-
 <table class = "DeviceList">
     <thead>
         <tr>
@@ -17,7 +18,19 @@
     </tbody>
 </table>
 
+
 @code {
     private List<Device> totalDevices = DeviceHandler.GetAllDevices();
     public List<Device> detectedDevices = DeviceHandler.GetCurrentDevices();
+    public List<Device> devices;
+    private static readonly string logName = "DatabaseEndpointComponent";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        //devices = await Http.GetFromJsonAsync<List<Device>>("api/devices");
+        //Logger.Log(logName,$"Got devices from endpoint, {devices.ToArray().ToString()}");
+        var rawResponse = await Http.GetStringAsync("devices");
+        Console.WriteLine(rawResponse); 
+    }
 }
