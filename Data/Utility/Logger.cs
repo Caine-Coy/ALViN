@@ -12,7 +12,7 @@ public static class Logger
     private static bool isStarted = false;
     private static Stack<String> log = new();
 
-    public static void Startup(){
+    public async static void Startup(){
         isStarted = true;
         verbosity = Settings.GetIntSetting("LoggerVerbosity");
         Log(logName,"Logger starting.");
@@ -20,7 +20,6 @@ public static class Logger
     }
 
     public static void Log(String callingObject,string msg){
-        if (!isStarted) Startup();
         composeMessage(callingObject,msg,2);
     }
 
@@ -33,6 +32,7 @@ public static class Logger
     }
 
     private static void composeMessage(String callingObject,string msg, int msgVerbosity){
+        if (!isStarted) Startup();
         string message = DateTime.Now.ToString() + " : " +callingObject.ToString() + " : " + msg;
         if (msgVerbosity <= verbosity){
             log.Push(message);

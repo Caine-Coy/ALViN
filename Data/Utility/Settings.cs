@@ -10,12 +10,13 @@ public static class Settings
 {
     readonly static bool debug = true;
     private static readonly string logName = "Settings";
-    private static Hashtable List = LoadSettings();
-    
+    private static Hashtable List;
+
     static int TimeSinceLastSeen;
 
     //This makes default settings.
-    static Hashtable NewSettings(){
+    private static Hashtable NewSettings()
+    {
         Hashtable settings = new(){
             //Generic
             //0-2 Verbosity. 2: Logs, 1: Warns, 0 Errors.
@@ -23,7 +24,9 @@ public static class Settings
             {"Debug",true},
 
             //Storage
-            {"DatabaseLocation",@"\ALViNDatabase.db"},
+            {"DatabaseLocation","http://127.0.0.1:8090/api"},
+            {"DatabaseEmail","ALViN@Caine.pro"},
+            {"DatabasePassword","1234567890"},
             
 
             //Scanning
@@ -33,64 +36,84 @@ public static class Settings
         return settings;
     }
 
-    static Hashtable LoadSettings(){
+    static Hashtable LoadSettings()
+    {
         //Try Load from storage
         List = StorageManager.LoadSettings();
         //if failed, make new default settings.
-        if (List == null){
+        if (List == null)
+        {
             List = NewSettings();
-            Logger.Warn(logName,"Failed to load settings. Creating settings from defaults.");
-        }   
+            Logger.Warn(logName, "Failed to load settings. Creating settings from defaults.");
+        }
 
         return List;
     }
-    public static int GetIntSetting(string setting){
-        if (List.ContainsKey(setting)){
+    public static int GetIntSetting(string setting)
+    {
+        LoadSettings();
+        if (List.ContainsKey(setting))
+        {
             var result = List[setting];
-            if (result != null && result.GetType() == typeof(int)){
+            if (result != null && result.GetType() == typeof(int))
+            {
                 return (int)result;
             }
-            else{
-                Logger.Error(logName,"Incorrect Setting Value!");
+            else
+            {
+                Logger.Error(logName, "Incorrect Setting Value!");
             }
         }
-        else{
-            Logger.Error(logName,"Setting " + setting + " Not Found!");
+        else
+        {
+            Logger.Error(logName, "Setting " + setting + " Not Found!");
         }
         return 0;
     }
-    public static string GetSetting(string setting){
-        if (List.ContainsKey(setting)){
+    public static string GetSetting(string setting)
+    {
+        LoadSettings();
+        if (List.ContainsKey(setting))
+        {
             var result = List[setting];
-            if (result != null){
+            if (result != null)
+            {
                 return (string)result;
             }
-            else{
-                Logger.Error(logName,"Incorrect Setting Value!");
+            else
+            {
+                Logger.Error(logName, "Incorrect Setting Value!");
             }
         }
-        else{
-            Logger.Error(logName,"Setting " + setting + " Not Found!");
+        else
+        {
+            Logger.Error(logName, "Setting " + setting + " Not Found!");
         }
         return "";
     }
-        public static bool GetBoolSetting(string setting){
-        if (List.ContainsKey(setting)){
+    public static bool GetBoolSetting(string setting)
+    {
+        LoadSettings();
+        if (List.ContainsKey(setting))
+        {
             bool? result = (bool)List[setting];
-            if (result == null){
-                Logger.Error(logName,"Setting "+ setting + " Malformed! Expected Bool Got "+ List[setting]+ ". Returning False.");
+            if (result == null)
+            {
+                Logger.Error(logName, "Setting " + setting + " Malformed! Expected Bool Got " + List[setting] + ". Returning False.");
                 return false;
             }
             return (bool)result;
         }
-        else{
-            Logger.Error(logName,"Setting " + setting + " Not Found!");
+        else
+        {
+            Logger.Error(logName, "Setting " + setting + " Not Found!");
             return false;
         }
-       
+
     }
 
-    static void SaveSettings(){
+    static void SaveSettings()
+    {
 
     }
 

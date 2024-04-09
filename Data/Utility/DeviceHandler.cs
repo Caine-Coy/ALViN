@@ -9,45 +9,43 @@ public static class DeviceHandler
 {
     private static readonly string logName = "DeviceHandler";
     private static TimeSpan timeSinceSeenCutoff;
-    private static List<Device> devices = LoadDevices();
-    private static List<Device> recentDevices = CompileRecentDevices();
+    private static List<Device> devices = new();
+    private static List<Device> recentDevices = new();
 
-    public static void CheckSettings(){
+    public static void CheckSettings()
+    {
         var timeCutoff = Settings.GetIntSetting("TimeSinceSeenCutoff");
         //Makes new Timespan of 0, hours, minutes from the settings, and 0 seconds.
-        timeSinceSeenCutoff = new(0,timeCutoff,0);
+        timeSinceSeenCutoff = new(0, timeCutoff, 0);
     }
 
-    private static List<Device> LoadDevices()
-      {
-        return StorageManager.GetDevices();
-     }
+    public static async Task<List<Device>>? GetCurrentDevicesAsync()
+    {
+        recentDevices.Clear();
+        devices = await GetAllDevicesAsync();
+        DateTime now = DateTime.UtcNow;
+        int timeCutoff = Settings.GetIntSetting("TimeSinceSeenCutoff");
 
-    private static List<Device> CompileRecentDevices()
-      {
-        recentDevices = LoadDevices();
-        DateTime now = DateTime.Now;
-        int timeCutoffInt = Settings.GetIntSetting("TimeSinceSeenCutoff");
-        DateTime timeCutoff = now.Subtract(TimeSpan.FromMinutes(timeCutoffInt));
-
-        foreach (Device device in devices){
-            if (device.LastDetected > now.Subtract(timeSinceSeenCutoff)){
+        foreach (Device device in devices)
+        {
+            Logger.Log(logName, $"Device {device.Name} Last seen at {device.LastDetected}. Threshold is {timeCutoff} Minutes, this was seen {(int)now.Subtract(device.LastDetected).TotalMinutes} Minutes ago.");
+            if (now.Subtract(device.LastDetected).TotalMinutes < timeCutoff)
+            {
                 recentDevices.Add(device);
             }
         }
-        Logger.Log(logName,$@"Found {recentDevices.Count} tracked within the last {timeCutoffInt} Minutes.");
+        Logger.Log(logName, $@"Found {recentDevices.Count} tracked within the last {timeCutoff} Minutes.");
         return recentDevices;
     }
 
-    public static List<Device> GetAllDevices(){
-        devices = LoadDevices();
+    public static async Task<List<Device>> GetAllDevicesAsync()
+    {
+        devices = await StorageManager.GetDevicesAsync();
+        if (devices == null)
+        {
+            devices = new();
+            Logger.Error(logName, "Device List is Null.");
+        }
         return devices;
-    } 
-
-    public static List<Device> GetCurrentDevices(){
-        recentDevices = CompileRecentDevices();
-        return recentDevices;
     }
-
-
 }
