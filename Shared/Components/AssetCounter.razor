@@ -1,23 +1,50 @@
-<div class="alert alert-secondary mt-4">
-    <span class="oi oi-pencil me-2" aria-hidden="true">@detectedDevices.Count devices found out of @totalDevices.Count total devices</span>
-</div>
 
-<table class = "DeviceList">
+
+<div class="alert alert-secondary mt-4">
+    <span class="oi oi-pencil me-2" aria-hidden="true">@detectedDevices.Count devices found out of @totalDevices.Count
+        total devices</span>
+</div>
+@using ALViN.Data
+@if (totalDevices == null)
+{
+    <p><em>Loading...</em></p>
+}
+else{
+
+<table class="DeviceList">
     <thead>
         <tr>
             <th>Device</th>
             <th>Location</th>
         </tr>
     </thead>
-    <tbody>
-        @foreach (var device in totalDevices){
-            <td>@device.Name</td>
-            <td>@device.LastBeacon.Name</td>
+    <tbody> 
+        @foreach (Device device in @totalDevices)
+        {
+            <tr>
+                <td>@device.Name</td>
+                <td>@device.LastBeacon?.Name ?? "N/A"</td>
+            </tr>
         }
     </tbody>
 </table>
+}
 
-@code {
-    private List<Device> totalDevices = DeviceHandler.GetAllDevices();
-    public List<Device> detectedDevices = DeviceHandler.GetCurrentDevices();
+@code
+{
+    public List<Device> totalDevices = new();
+    public List<Device> detectedDevices = new();
+
+    private readonly string logName = "AssetCounter";
+    protected override async Task OnInitializedAsync()
+    {
+        List<Device> totalDevices = await DeviceHandler.GetAllDevicesAsync();
+        //List<Device> totalDevices = null;
+        Logger.Log(logName, $"{totalDevices.Count} Device to Display");
+        List<Device> detectedDevices = await DeviceHandler.GetCurrentDevicesAsync();
+        base.ShouldRender();
+        
+    }
+
+    
 }

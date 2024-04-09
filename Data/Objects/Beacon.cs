@@ -1,11 +1,16 @@
 namespace ALViN.Data.Objects;
+
+using System.Text.Json.Serialization;
 using System.Xml;
 using System.Xml.Serialization;
 
 public class Beacon
 {
-    public Guid Uuid;
+    [JsonPropertyName("id")]
+    public string Uuid {get;set;}
+    [JsonPropertyName("Name")]
     public string? Name {get; set;}
+    [JsonIgnore]
     public List<Device> localDevices;
 
     public Beacon(){
