@@ -95,7 +95,6 @@ public static class StorageManager
         }
         return devices;
     }
-
     public static async Task<List<Device>>? GetDevicesAsync()
     {
         if (!LoggedIn)

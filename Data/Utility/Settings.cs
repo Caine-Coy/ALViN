@@ -32,6 +32,7 @@ public static class Settings
             //Scanning
             //detection Time in minutes past you consider a device inactive
             {"TimeSinceSeenCutoff",30},
+            {"APICallTimerInSec",30},
         };
         return settings;
     }
