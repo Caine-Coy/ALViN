@@ -1,21 +1,21 @@
-
-
+@attribute [StreamRendering(true)]
+<!--
 <div class="alert alert-secondary mt-4">
     <span class="oi oi-pencil me-2" aria-hidden="true">@detectedDevices.Count devices found out of @totalDevices.Count
         total devices</span>
 </div>
-@using ALViN.Data
-@if (totalDevices == null)
+-->
+@if (@totalDevices == null)
 {
     <p><em>Loading...</em></p>
 }
 else{
-
 <table class="DeviceList">
     <thead>
         <tr>
             <th>Device</th>
             <th>Location</th>
+            <th>Last Detected</th>
         </tr>
     </thead>
     <tbody> 
@@ -23,7 +23,8 @@ else{
         {
             <tr>
                 <td>@device.Name</td>
-                <td>@device.LastBeacon?.Name ?? "N/A"</td>
+                <td>@device.LastBeacon?.Name</td>
+                <td>@device.LastDetected</td>
             </tr>
         }
     </tbody>
@@ -32,17 +33,16 @@ else{
 
 @code
 {
-    public List<Device> totalDevices = new();
-    public List<Device> detectedDevices = new();
+    public List<Device>? totalDevices;
+    public List<Device>? detectedDevices;
 
     private readonly string logName = "AssetCounter";
     protected override async Task OnInitializedAsync()
     {
-        List<Device> totalDevices = await DeviceHandler.GetAllDevicesAsync();
+        totalDevices = await DeviceHandler.GetAllDevicesAsync();
         //List<Device> totalDevices = null;
         Logger.Log(logName, $"{totalDevices.Count} Device to Display");
-        List<Device> detectedDevices = await DeviceHandler.GetCurrentDevicesAsync();
-        base.ShouldRender();
+        //List<Device> detectedDevices = await DeviceHandler.GetCurrentDevicesAsync();
         
     }
 
