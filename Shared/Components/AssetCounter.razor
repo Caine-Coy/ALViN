@@ -47,7 +47,6 @@ else{
         Logger.Log(logName, "Set API Timer to " + TimerSec);
         _timer = new(async _ => {
             totalDevices = await DeviceHandler.GetAllDevicesAsync();
-            Console.WriteLine("Loggin");
             await InvokeAsync(StateHasChanged);
         },null,0,TimerSec*1000);
 

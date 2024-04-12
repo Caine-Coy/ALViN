@@ -8,7 +8,7 @@ public class Beacon
 {
     [JsonPropertyName("id")]
     public string Uuid {get;set;}
-    [JsonPropertyName("Name")]
+    [JsonPropertyName("name")]
     public string? Name {get; set;}
     [JsonIgnore]
     public List<Device> localDevices;

@@ -22,12 +22,6 @@ public static class StorageManager
         BaseAddress = PocketBaseURL,
     };
 
-    private class LoginResponse
-    {
-        [JsonPropertyName("token")]
-        public string? Token { get; set; }
-    }
-
     private static JsonSerializerOptions SerializerOptions()
     {
         var options = new JsonSerializerOptions
@@ -35,37 +29,6 @@ public static class StorageManager
             Converters = { new DateTimeConverter() }
         };
         return options;
-    }
-
-    public static async Task<string?> LoginAndGetTokenAsync(string email, string password)
-    {
-        var loginURL = $"{PocketBaseURL}/collections/devices/auth-with-password";
-
-        var loginData = new { email, password };
-        Logger.Log(logName, $"{loginURL} with {loginData}");
-        var response = await HttpClient.PostAsJsonAsync(loginURL, loginData);
-
-        if (response.IsSuccessStatusCode)
-        {
-            var content = await response.Content.ReadAsStringAsync();
-            var tokenResponse = JsonSerializer.Deserialize<LoginResponse>(content, SerializerOptions());
-            LoggedIn = true;
-            return tokenResponse?.Token;
-        }
-        else
-        {
-            LoggedIn = false;
-            Logger.Error(logName, $"Failed to Log into database with message {response.Content.ReadAsStringAsync().Result}");
-            return null;
-        }
-    }
-
-    public static void SetAuthorizationHeader(string token)
-    {
-        if (!string.IsNullOrEmpty(token))
-        {
-            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        }
     }
     private static async Task<List<Device>> JoinBeaconAndDevices(List<Device> devices)
     {
@@ -97,12 +60,6 @@ public static class StorageManager
     }
     public static async Task<List<Device>>? GetDevicesAsync()
     {
-        if (!LoggedIn)
-        {
-            var token = await LoginAndGetTokenAsync(Settings.GetSetting("DatabaseEmail"), Settings.GetSetting("DatabasePassword"));
-            SetAuthorizationHeader(token);
-        }
-
         var response = await HttpClient.GetAsync($"{PocketBaseURL}/collections/devices/records");
         if (response.IsSuccessStatusCode)
         {

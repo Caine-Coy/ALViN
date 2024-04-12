@@ -6,13 +6,13 @@ public class Device
 {  
     [JsonPropertyName("id")]
     public string Id {get;set;}
-    [JsonPropertyName("Name")]
+    [JsonPropertyName("name")]
     public string? Name {get; set;} 
-    [JsonPropertyName("LastUuid")]
+    [JsonPropertyName("lastuuid")]
     public string LastUuid {get; set;}
-    [JsonPropertyName("LastDetected")]
+    [JsonPropertyName("lastdetected")]
     public DateTime LastDetected {get; set;}
-    [JsonPropertyName("LastBeacon")]
+    [JsonPropertyName("lastbeacon")]
     public string LastBeaconID{get; set;}
     [JsonIgnore]
     public Beacon LastBeacon{get; set;}

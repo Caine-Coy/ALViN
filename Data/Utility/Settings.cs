@@ -24,10 +24,7 @@ public static class Settings
             {"Debug",true},
 
             //Storage
-            {"DatabaseLocation","http://127.0.0.1:8090/api"},
-            {"DatabaseEmail","ALViN@Caine.pro"},
-            {"DatabasePassword","1234567890"},
-            
+            {"DatabaseLocation","http://192.168.1.168:8080/api"},            
 
             //Scanning
             //detection Time in minutes past you consider a device inactive
