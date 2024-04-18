@@ -12,10 +12,10 @@
     <p><em>Loading...</em></p>
 }
 else{
-<table class="DeviceList">
+<table class="DeviceList" style="width:100%">
     <thead>
         <tr>
-            <th>Device</th>
+            <th >Device</th>
             <th>Location</th>
             <th>Last Detected</th>
         </tr>
@@ -24,7 +24,7 @@ else{
         @foreach (Device device in @totalDevices)
         {
             <tr>
-                <td>@device.Name</td>
+                <td style="font-weight: bold;">@device.Name</td>
                 <td>@device.LastBeacon?.Name</td>
                 <td>@device.LastDetected</td>
             </tr>

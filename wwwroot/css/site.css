@@ -62,3 +62,15 @@ a, .btn-link {
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
+
+th:nth-child(even),td:nth-child(even) {
+  background-color: rgba(150, 212, 212, 0.4);
+}
+
+tr:hover {background-color: #D6EEEE;}
+
+tr {
+    border-bottom: 1px solid #ddd;
+    padding: 100%;
+    
+  }
