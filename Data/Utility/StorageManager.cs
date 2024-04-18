@@ -41,18 +41,23 @@ public static class StorageManager
         {
             foreach (Device device in devices)
             {
-                Logger.Log(logName, $"Trying to match Device BeaconID {device.LastBeaconID} with known Beacons");
+                Logger.Log(logName, $"Trying to match Device BeaconID {device.LastBeacon} with known Beacons");
                 foreach (Beacon beacon in beacons)
                 {
-                    if (device.LastBeaconID == beacon.Uuid) device.LastBeacon = beacon;
-                    break;
+                    if (device.LastBeaconID == beacon.Id)
+                    {
+                        device.LastBeacon = beacon;
+                        break;
+                    }
+
                 }
                 if (device.LastBeacon != null)
                 {
                     Logger.Log(logName, $"Last seen {device.Name} near {device.LastBeacon.Name} at {device.LastDetected}");
                 }
-                else{
-                    Logger.Warn(logName,$"Not Found Beacon ID {device.LastBeaconID} Before.");
+                else
+                {
+                    Logger.Warn(logName, $"Not Found Beacon ID {device.LastBeaconID} Before.");
                 }
             }
         }

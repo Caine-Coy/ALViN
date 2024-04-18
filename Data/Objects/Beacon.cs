@@ -7,6 +7,8 @@ using System.Xml.Serialization;
 public class Beacon
 {
     [JsonPropertyName("id")]
+    public string Id { get; set; }
+    [JsonPropertyName("uuid")]
     public string Uuid {get;set;}
     [JsonPropertyName("name")]
     public string? Name {get; set;}

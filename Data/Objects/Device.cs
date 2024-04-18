@@ -14,7 +14,6 @@ public class Device
     public DateTime LastDetected {get; set;}
     [JsonPropertyName("lastbeacon")]
     public string LastBeaconID{get; set;}
-    [JsonIgnore]
     public Beacon LastBeacon{get; set;}
     public Device(){
 
