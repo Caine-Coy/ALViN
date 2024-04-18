@@ -10,14 +10,15 @@ POCKETBASE_URL = 'http://192.168.1.168:8080/api'
 BEACON_URL = '/collections/beacons/records'
 DEVICE_URL = '/collections/devices/records'
 DEVICE_NAME = socket.gethostname()
+CYCLE_TIME = 10
 
-CYCLE_TIME = 60
+LAST_UUID = ""
 
 async def update_device(beacon):
 
     data = {
         "name": DEVICE_NAME,
-        "lastUuid": beacon['uuid'],
+        "lastuuid": beacon['uuid'],
         "lastdetected": datetime.datetime.utcnow().isoformat() + "Z",  # Current time in ISO 8601 format
         "lastbeacon": beacon['id']
     }
@@ -40,11 +41,15 @@ async def update_device(beacon):
     else:
         print(f"Failed to update device info: {response.content}")
 
+async def printScan():
+    devices = await BleakScanner.discover()
+    for d in devices:
+        print(f"{d.address} called {d.name}")
+
 async def scan_and_update():
     db_beacons = await get_beacons() 
     devices = await BleakScanner.discover()
     beacon_dict = {}
-    
     # Collect RSSI values for each beacon
     for d in devices:
         uuid = str(d.address)  
@@ -82,16 +87,18 @@ async def get_beacons():
 async def get_devices():
     response = requests.get(POCKETBASE_URL + BEACON_URL)
     if response.ok:
-        beacons = response.json().get('items', [])
-        return {beacon['uuid']: beacon for beacon in beacons}
+        devices = response.json().get('items', [])
+        return {devices['uuid']: device for device in devices}
     else:
-        print(f"Failed to retrieve beacons: {response.content}")
+        print(f"Failed to retrieve devicess: {response.content}")
         return []
 
 async def main():
     while True:
         await scan_and_update()
-        await asyncio.sleep(CYCLE_TIME)  # Delay for 60 seconds
+        await printScan()
+        await asyncio.sleep(CYCLE_TIME)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
