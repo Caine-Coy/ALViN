@@ -2,11 +2,6 @@
 @implements IDisposable
 @attribute [StreamRendering(true)]
 
-@if (detectedDevices!=null){
-<div class="alert alert-secondary mt-4">
-    <span class="oi oi-pencil me-2" aria-hidden="true">@detectedDevices.Count devices found out of @totalDevices.Count total devices</span>
-</div>
-}
 @if (@totalDevices == null)
 {
     <p><em>Loading...</em></p>
@@ -37,13 +32,13 @@ else{
 {
     public List<Device>? totalDevices;
     public List<Device>? detectedDevices;
-
-    private int TimerSec = Settings.GetIntSetting("APICallTimerInSec");
-    Timer _timer;
+    private Timer _timer;
+    private int TimerSec;
 
     private readonly string logName = "AssetCounter";
     protected override async Task OnInitializedAsync()
     {        
+        TimerSec = Settings.GetIntSetting("APICallTimerInSec");
         Logger.Log(logName, "Set API Timer to " + TimerSec);
         _timer = new(async _ => {
             totalDevices = await DeviceHandler.GetAllDevicesAsync();

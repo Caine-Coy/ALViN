@@ -1,0 +1,80 @@
+@page "/settings"
+@using ALViN.Data
+@attribute [StreamRendering(true)]
+<PageTitle>Settings</PageTitle>
+
+<h1>Settings</h1>
+<div class="Settings">
+    
+    <div class="Setting">
+        <label for="LoggerVerbosity">Logger Verbosity (Between 0-2):</label>
+        <InputNumber id="LoggerVerbosity" @bind-Value="_loggerVerbosity" />
+        @if (_loggerVerbosity > 2 || _loggerVerbosity < 0)
+        {
+            <label class="validation-message" for="LoggerVerbosity">Error: Logger Verbosity can only be between 2 and
+                0</label>
+        }
+    </div>
+
+    <div class="Setting">
+        <label for="Debug">Debug Mode:</label>
+        <InputCheckbox id="Debuge" @bind-Value="_debug" />
+    </div>
+
+    <div class="Setting">
+        <label for="DatabaseLocation">Database API Location (Don't touch unless you know what you are doing!):</label>
+        <InputText id="DatabaseLocation" @bind-Value="_databaseLocation" />
+        @if (!Uri.TryCreate(_databaseLocation, UriKind.Absolute, out Uri? _uri))
+        {
+            //Maybe add actual database validation??
+            <label class="validation-message" for="DatabaseLocation">Error: "URL Invalid"</label>
+        }
+    </div>
+
+    <div class="Setting">
+        <label for="APICallTimer">Database Update Timer In Seconds</label>
+        <InputNumber id="APICallTimer" @bind-Value="_APICallTimer" />
+    </div>
+</div>
+<div class = "ButtonPanel">
+<button @onclick="HandleSubmit" type="submit" class="btn btn-primary">Save Settings</button>
+<button @onclick="Default" type="submit" class="btn btn-primary">Return To Default Settings</button>
+</div>
+@code {
+    private int _loggerVerbosity;
+    private string _loggerVerbosityError = "Logger Verbosity can only be between 0 and 2";
+    private bool _debug;
+    private string _databaseLocation;
+    private int _APICallTimer;
+
+
+    private readonly string logName = "SettingsPage";
+    protected override void OnInitialized()
+    {
+        _loggerVerbosity = Settings.GetIntSetting("LoggerVerbosity");
+        _debug = Settings.GetBoolSetting("Debug");
+        _databaseLocation = Settings.GetSetting("DatabaseLocation");
+        _APICallTimer = Settings.GetIntSetting("APICallTimerInSec");
+    }
+
+    private void HandleSubmit()
+    {
+        if (_loggerVerbosity <= 2 && _loggerVerbosity >= 0)
+        {
+            Settings.SetSetting("LoggerVerbosity", _loggerVerbosity);
+        }
+        Settings.SetSetting("Debug", _debug);
+        Settings.SetSetting("DatabaseLocation",_databaseLocation);
+        Settings.SetSetting("APICallTimerInSec",_APICallTimer);
+    }
+    
+    private void Default(){
+        Logger.Log(logName,"Returning to Defaults.");
+        StorageManager.DefaultSettings();
+        _loggerVerbosity = Settings.GetIntSetting("LoggerVerbosity");
+        _debug = Settings.GetBoolSetting("Debug");
+        _databaseLocation = Settings.GetSetting("DatabaseLocation");
+        _APICallTimer = Settings.GetIntSetting("APICallTimerInSec");
+        HandleSubmit();
+    }
+}

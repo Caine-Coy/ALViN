@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using ALViN.Data.Objects;
@@ -13,7 +14,7 @@ public static class StorageManager
 {
     private static readonly string logName = "StorageManager";
     private static readonly Uri PocketBaseURL = new(Settings.GetSetting("DatabaseLocation"));
-
+    private static Hashtable settings;
 
     private static bool LoggedIn = false;
 
@@ -93,12 +94,24 @@ public static class StorageManager
 
     public static Hashtable LoadSettings()
     {
-        return null;
+        if (settings != null)
+        {
+            return settings;
+        }
+        else
+        {
+            return Settings.NewSettings();
+        }
+    }
+    public static Hashtable DefaultSettings()
+    {
+        settings = Settings.NewSettings();
+        return settings;
     }
 
-    public static void SaveSettings()
+    public static void SaveSettings(Hashtable _settings)
     {
-
+        settings = _settings;
     }
 
 }

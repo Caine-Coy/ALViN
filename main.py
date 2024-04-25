@@ -19,7 +19,7 @@ async def update_device(beacon):
     data = {
         "name": DEVICE_NAME,
         "lastuuid": beacon['uuid'],
-        "lastdetected": datetime.datetime.utcnow().isoformat() + "Z",  # Current time in ISO 8601 format
+        "lastdetected": datetime.datetime.utcnow().isoformat() + "Z", 
         "lastbeacon": beacon['id']
     }
 

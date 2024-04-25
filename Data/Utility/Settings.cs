@@ -15,7 +15,7 @@ public static class Settings
     static int TimeSinceLastSeen;
 
     //This makes default settings.
-    private static Hashtable NewSettings()
+    public static Hashtable NewSettings()
     {
         Hashtable settings = new(){
             //Generic
@@ -108,6 +108,43 @@ public static class Settings
             return false;
         }
 
+    }
+
+    public static void SetSetting(string setting, String Value)
+    {
+        if (List.ContainsKey(setting))
+        {
+            List[setting] = Value;
+            StorageManager.SaveSettings(List);
+        }
+        else
+        {
+            Logger.Error(logName, "Setting " + setting + " Not Found!");
+        }
+    }
+    public static void SetSetting(string setting, bool Value)
+    {
+        if (List.ContainsKey(setting))
+        {
+            List[setting] = Value;
+            StorageManager.SaveSettings(List);
+        }
+        else
+        {
+            Logger.Error(logName, "Setting " + setting + " Not Found!");
+        }
+    }
+    public static void SetSetting(string setting, int Value)
+    {
+        if (List.ContainsKey(setting))
+        {
+            List[setting] = Value;
+            StorageManager.SaveSettings(List);
+        }
+        else
+        {
+            Logger.Error(logName, "Setting " + setting + " Not Found!");
+        }
     }
 
     static void SaveSettings()
