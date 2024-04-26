@@ -33,11 +33,7 @@ public static class StorageManager
     }
     private static async Task<List<Device>> JoinBeaconAndDevices(List<Device> devices)
     {
-        var response = await HttpClient.GetAsync($"{PocketBaseURL}/collections/beacons/records");
-        var content = await response.Content.ReadAsStringAsync();
-
-        List<Beacon> beacons = JsonSerializer.Deserialize<BeaconResponse>(content, SerializerOptions()).Items;
-        Logger.Log(logName, $"Found {beacons.Count} beacons in database.");
+        List<Beacon> beacons = await GetBeaconsAsync();
         if (beacons != null)
         {
             foreach (Device device in devices)
@@ -64,6 +60,14 @@ public static class StorageManager
         }
         return devices;
     }
+    public static async Task<List<Beacon>> GetBeaconsAsync(){
+
+        var response = await HttpClient.GetAsync($"{PocketBaseURL}/collections/beacons/records");
+        var content = await response.Content.ReadAsStringAsync();
+        List<Beacon> beacons = JsonSerializer.Deserialize<BeaconResponse>(content, SerializerOptions()).Items;
+        Logger.Log(logName, $"Found {beacons.Count} beacons in database.");
+        return beacons;
+    }
     public static async Task<List<Device>>? GetDevicesAsync()
     {
         var response = await HttpClient.GetAsync($"{PocketBaseURL}/collections/devices/records");
@@ -89,6 +93,24 @@ public static class StorageManager
         }
         return new List<Device>();
 
+    }
+
+    public async static Task<bool> AddBeaconToDatabase(Beacon beacon){
+        var response = await HttpClient.PostAsJsonAsync($"{PocketBaseURL}/collections/beacons/records", beacon);
+        if (response.IsSuccessStatusCode)
+        {
+           return true;
+        }
+        else
+        {
+            Logger.Error(logName, $"Failed to add beacon to database! Reason : {response.StatusCode}");
+            return false;
+        }
+    }
+
+    public async static Task<bool> DeleteBeaconFromDatabase(Beacon beacon){
+        var response = await HttpClient.DeleteAsync($"{PocketBaseURL}/collections/beacons/{beacon.Id}");
+        return response.IsSuccessStatusCode;
     }
 
 

@@ -48,4 +48,11 @@ public static class DeviceHandler
         }
         return devices;
     }
+
+    public static async Task<bool> DeleteBeacon(Beacon beacon){
+        bool result = await StorageManager.DeleteBeaconFromDatabase(beacon);
+        if (result) Logger.Log(logName,$"Successfully Deleted {beacon.Name}");
+        return result;
+    
+    }
 }

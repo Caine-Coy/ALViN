@@ -1,6 +1,6 @@
 This is a technical demo of a laptop tracking interface
 Designed by Joe Benson for his final year project at the university of Brighton.
-ALViN and its associated WABBA (link pls) are open source under the MIT license. 
+ALViN is open source under the MIT license. 
 
 The MIT License (MIT)
 

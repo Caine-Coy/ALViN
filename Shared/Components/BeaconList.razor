@@ -2,26 +2,27 @@
 @implements IDisposable
 @attribute [StreamRendering(true)]
 
-@if (@totalDevices == null)
+<h2>Beacon List</h2>
+@if (@beacons == null)
 {
     <p><em>Loading...</em></p>
 }
 else{
-<table class="DeviceList" style="width:100%">
+<table class="BeaconList" style="width:100%">
     <thead>
         <tr>
-            <th >Device</th>
-            <th>Location</th>
-            <th>Last Detected</th>
+            <th>Beacon Name</th>
+            <th>UUID</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody> 
-        @foreach (Device device in @totalDevices)
+        @foreach (Beacon beacon in @beacons)
         {
             <tr>
-                <td style="font-weight: bold;">@device.Name</td>
-                <td>@device.LastBeacon?.Name</td>
-                <td>@device.LastDetected</td>
+                <td style="font-weight: bold;">@beacon.Name</td>
+                <td>@beacon.Uuid</td>
+                <td><button type="Submit" value="@beacon.Id">Delete</button></td>
             </tr>
         }
     </tbody>
@@ -30,8 +31,7 @@ else{
 
 @code
 {
-    public List<Device>? totalDevices;
-    public List<Device>? detectedDevices;
+    public List<Beacon>? beacons;
     private Timer _timer;
     private int TimerSec;
 
@@ -41,13 +41,16 @@ else{
         TimerSec = Settings.GetIntSetting("APICallTimerInSec");
         Logger.Log(logName, "Set API Timer to " + TimerSec);
         _timer = new(async _ => {
-            totalDevices = await DeviceHandler.GetAllDevicesAsync();
+            beacons = await StorageManager.GetBeaconsAsync();
             await InvokeAsync(StateHasChanged);
         },null,0,TimerSec*1000);
-
+    }
+    
+    private async void HandleValidSubmit(){
+        //StorageManager.DeleteBeaconFromDatabase(beacons[])
     }
     void IDisposable.Dispose(){
-        Logger.Log(logName,"Disposed of Asset Counter");
+        Logger.Log(logName,"Disposed of Beacon List");
         _timer.Dispose();
     }  
 }
