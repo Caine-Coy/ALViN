@@ -41,10 +41,14 @@ else{
         TimerSec = Settings.GetIntSetting("APICallTimerInSec");
         Logger.Log(logName, "Set API Timer to " + TimerSec);
         _timer = new(async _ => {
-            totalDevices = await DeviceHandler.GetAllDevicesAsync();
-            await InvokeAsync(StateHasChanged);
+            UpdateList();
         },null,0,TimerSec*1000);
 
+    }
+
+    private async void UpdateList(){
+        totalDevices = await StorageManager.GetDevicesAsync();
+        await InvokeAsync(StateHasChanged);
     }
     void IDisposable.Dispose(){
         Logger.Log(logName,"Disposed of Asset Counter");

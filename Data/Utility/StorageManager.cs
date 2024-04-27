@@ -109,7 +109,8 @@ public static class StorageManager
     }
 
     public async static Task<bool> DeleteBeaconFromDatabase(Beacon beacon){
-        var response = await HttpClient.DeleteAsync($"{PocketBaseURL}/collections/beacons/{beacon.Id}");
+        var response = await HttpClient.DeleteAsync($"{PocketBaseURL}/collections/beacons/records/{beacon.Id}");
+        Logger.Log(logName,$"Deleted Beacon {beacon.Id}, Response : {response.StatusCode}");
         return response.IsSuccessStatusCode;
     }
 

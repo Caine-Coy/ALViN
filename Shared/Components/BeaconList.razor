@@ -2,6 +2,25 @@
 @implements IDisposable
 @attribute [StreamRendering(true)]
 
+<h2>Add A Beacon</h2>
+
+<EditForm Model="@beacon" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Beacon Name:</label>
+        <InputText id="name" @bind-Value="@beacon.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="uuid">Beacon UUID:</label>
+        <InputText id="uuid" @bind-Value="@beacon.Uuid" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Beacon</button>
+</EditForm>
+
 <h2>Beacon List</h2>
 @if (@beacons == null)
 {
@@ -13,7 +32,7 @@ else{
         <tr>
             <th>Beacon Name</th>
             <th>UUID</th>
-            <th>Delete</th>
+            <th>Operations</th>
         </tr>
     </thead>
     <tbody> 
@@ -22,7 +41,7 @@ else{
             <tr>
                 <td style="font-weight: bold;">@beacon.Name</td>
                 <td>@beacon.Uuid</td>
-                <td><button type="Submit" value="@beacon.Id">Delete</button></td>
+                <td><button @onclick="() => Delete(beacon)">Delete</button></td>
             </tr>
         }
     </tbody>
@@ -31,9 +50,11 @@ else{
 
 @code
 {
+    private Beacon beacon = new();
     public List<Beacon>? beacons;
     private Timer _timer;
     private int TimerSec;
+
 
     private readonly string logName = "AssetCounter";
     protected override async Task OnInitializedAsync()
@@ -41,16 +62,35 @@ else{
         TimerSec = Settings.GetIntSetting("APICallTimerInSec");
         Logger.Log(logName, "Set API Timer to " + TimerSec);
         _timer = new(async _ => {
-            beacons = await StorageManager.GetBeaconsAsync();
-            await InvokeAsync(StateHasChanged);
+            UpdateList();
         },null,0,TimerSec*1000);
     }
+
+    private async void UpdateList(){
+        beacons = await StorageManager.GetBeaconsAsync();
+        await InvokeAsync(StateHasChanged);
+    }
     
-    private async void HandleValidSubmit(){
-        //StorageManager.DeleteBeaconFromDatabase(beacons[])
+    private async void Delete(Beacon beacon){
+        await StorageManager.DeleteBeaconFromDatabase(beacon);
+        UpdateList();
     }
     void IDisposable.Dispose(){
         Logger.Log(logName,"Disposed of Beacon List");
         _timer.Dispose();
     }  
+    
+        private async Task HandleValidSubmit()
+    {
+        if (beacon.Name != "" && beacon.Name != null){
+            if (beacon.Uuid != "" && beacon.Uuid != null){
+                bool result = await StorageManager.AddBeaconToDatabase(beacon);
+                if (result){
+                    Logger.Log(logName,$"Added Beacon {beacon.Name} @ UUID: {beacon.Uuid} to Database");
+                    beacon = new();
+                }
+            }
+        }  
+        UpdateList();
+    }
 }
