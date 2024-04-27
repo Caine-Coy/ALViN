@@ -39,7 +39,6 @@ else{
     protected override async Task OnInitializedAsync()
     {        
         TimerSec = Settings.GetIntSetting("APICallTimerInSec");
-        Logger.Log(logName, "Set API Timer to " + TimerSec);
         _timer = new(async _ => {
             UpdateList();
         },null,0,TimerSec*1000);

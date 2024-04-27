@@ -1,0 +1,29 @@
+@using ALViN.Data
+@attribute [StreamRendering(true)]
+@implements IDisposable
+<div class = "LoggerBox" style="overflow-y: scroll; height:100%;">
+@if (@log != null){
+    foreach (string message in @log){
+        <code>@message</code>
+        <br>
+    }
+}
+</div>
+@code{
+    private Stack<string> log = Logger.log;
+    private readonly string logName = "Logger Display";
+    private Timer _timer;
+
+    protected override async Task OnInitializedAsync()
+    {        
+        int TimerSec = 1;
+        _timer = new(async _ => {
+            log = Logger.log;
+            await InvokeAsync(StateHasChanged);
+        },null,0,TimerSec*1000);
+    }
+        void IDisposable.Dispose(){
+        Logger.Log(logName,"Disposed of Loggerbox");
+        _timer.Dispose();
+    }  
+}

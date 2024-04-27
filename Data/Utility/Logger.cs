@@ -10,9 +10,9 @@ public static class Logger
     private static readonly string logName = "Logger";
     private static int verbosity;
     private static bool isStarted = false;
-    private static Stack<String> log = new();
+    public static Stack<string> log = new();
 
-    public async static void Startup(){
+    public static void Startup(){
         isStarted = true;
         verbosity = Settings.GetIntSetting("LoggerVerbosity");
         Log(logName,"Logger starting.");

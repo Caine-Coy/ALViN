@@ -16,7 +16,7 @@ public static class StorageManager
     private static readonly Uri PocketBaseURL = new(Settings.GetSetting("DatabaseLocation"));
     private static Hashtable settings;
 
-    private static bool LoggedIn = false;
+    //private static bool LoggedIn = false;
 
     private static readonly HttpClient HttpClient = new HttpClient()
     {
@@ -38,7 +38,6 @@ public static class StorageManager
         {
             foreach (Device device in devices)
             {
-                Logger.Log(logName, $"Trying to match Device BeaconID {device.LastBeacon} with known Beacons");
                 foreach (Beacon beacon in beacons)
                 {
                     if (device.LastBeaconID == beacon.Id)
@@ -48,11 +47,7 @@ public static class StorageManager
                     }
 
                 }
-                if (device.LastBeacon != null)
-                {
-                    Logger.Log(logName, $"Last seen {device.Name} near {device.LastBeacon.Name} at {device.LastDetected}");
-                }
-                else
+                if (device.LastBeacon == null)
                 {
                     Logger.Warn(logName, $"Not Found Beacon ID {device.LastBeaconID} Before.");
                 }

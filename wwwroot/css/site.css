@@ -18,6 +18,12 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+code {
+    color: black;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+}
+
 .content {
     padding-top: 1.1rem;
 }
