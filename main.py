@@ -64,14 +64,17 @@ async def scan_and_update():
 
     #Find beacon with highest RSSI
     rssi = -100
-    for beacon in beacon_dict:
-        if (beacon_dict[beacon][0] > rssi):
-            if db_beacons[beacon]:
-                closest_beacon_uuid = beacon
-    
-    closest_beacon = db_beacons[closest_beacon_uuid]
-    print(f"Closest beacon: {closest_beacon['uuid']} with UUID: {closest_beacon_uuid}")
-    await update_device(closest_beacon)
+    if beacon_dict: 
+        for beacon in beacon_dict:
+            if (beacon_dict[beacon][0] > rssi):
+                if db_beacons[beacon]:
+                    closest_beacon_uuid = beacon
+        
+        closest_beacon = db_beacons[closest_beacon_uuid]
+        print(f"Closest beacon: {closest_beacon['uuid']} with UUID: {closest_beacon_uuid}")
+        await update_device(closest_beacon)
+    else:
+        print("No Beacons In Database")
 
 async def get_beacons():
     response = requests.get(POCKETBASE_URL + BEACON_URL)
@@ -92,6 +95,9 @@ async def get_devices():
         return []
 
 async def main():
+    print("Please Enter the database URL. Default: http://192.168.1.168:8080/api")
+    global POCKETBASE_URL
+    POCKETBASE_URL = input()
     while True:
         await scan_and_update()
         await printScan()
