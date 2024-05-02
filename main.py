@@ -73,8 +73,6 @@ async def scan_and_update():
         closest_beacon = db_beacons[closest_beacon_uuid]
         print(f"Closest beacon: {closest_beacon['uuid']} with UUID: {closest_beacon_uuid}")
         await update_device(closest_beacon)
-    else:
-        print("No Beacons In Database")
 
 async def get_beacons():
     response = requests.get(POCKETBASE_URL + BEACON_URL)
