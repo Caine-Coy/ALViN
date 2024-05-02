@@ -13,7 +13,7 @@ using Microsoft.VisualBasic;
 public static class StorageManager
 {
     private static readonly string logName = "StorageManager";
-    private static readonly Uri PocketBaseURL = new(Settings.GetSetting("DatabaseLocation"));
+    private static Uri PocketBaseURL = new(Settings.GetSetting("DatabaseLocation"));
     private static Hashtable settings;
 
     //private static bool LoggedIn = false;
@@ -55,46 +55,64 @@ public static class StorageManager
         }
         return devices;
     }
-    public static async Task<List<Beacon>> GetBeaconsAsync(){
+    public static async Task<List<Beacon>?> GetBeaconsAsync()
+    {
+        try
+        {
+            var response = await HttpClient.GetAsync($"{PocketBaseURL}/collections/beacons/records");
+            var content = await response.Content.ReadAsStringAsync();
+            List<Beacon> beacons = JsonSerializer.Deserialize<BeaconResponse>(content, SerializerOptions()).Items;
+            if (beacons != null)
+            {
+                Logger.Log(logName, $"Found {beacons.Count} beacons in database.");
+                return beacons;
+            }
+            else
+            {
+                Logger.Log(logName, $"Failed to find any beacons. Response: {content}");
+                return null;
+            }
 
-        var response = await HttpClient.GetAsync($"{PocketBaseURL}/collections/beacons/records");
-        var content = await response.Content.ReadAsStringAsync();
-        List<Beacon> beacons = JsonSerializer.Deserialize<BeaconResponse>(content, SerializerOptions()).Items;
-        Logger.Log(logName, $"Found {beacons.Count} beacons in database.");
-        return beacons;
+        }
+        catch (Exception ex)
+        {
+            Logger.Error(logName, ex.ToString());
+            return null;
+        }
     }
     public static async Task<List<Device>>? GetDevicesAsync()
     {
-        var response = await HttpClient.GetAsync($"{PocketBaseURL}/collections/devices/records");
-        if (response.IsSuccessStatusCode)
+        try
         {
+            var response = await HttpClient.GetAsync($"{PocketBaseURL}/collections/devices/records");
             var content = await response.Content.ReadAsStringAsync();
-            try
-            {
-                List<Device> devices = JsonSerializer.Deserialize<DeviceResponse>(content, SerializerOptions()).Items;
+            List<Device> devices = JsonSerializer.Deserialize<DeviceResponse>(content, SerializerOptions()).Items;
+            if (devices != null){
                 Logger.Log(logName, $"Found {devices.Count} devices in database");
                 devices = await JoinBeaconAndDevices(devices);
                 return devices;
             }
-            catch (JsonException e)
-            {
-                Logger.Error(logName, $"{e.ToString()} with message {content}");
+            else{
+                Logger.Error(logName, "Empty Device List");
+                return new List<Device>();
             }
+            
         }
-        else
+        catch (Exception ex)
         {
-            Logger.Error(logName, await response.Content.ReadAsStringAsync());
-            Logger.Error(logName, "Failed to retrieve devices.");
+            Logger.Error(logName, $"Failed with exception {ex}");
+            return new List<Device>();
         }
-        return new List<Device>();
+
 
     }
 
-    public async static Task<bool> AddBeaconToDatabase(Beacon beacon){
+    public async static Task<bool> AddBeaconToDatabase(Beacon beacon)
+    {
         var response = await HttpClient.PostAsJsonAsync($"{PocketBaseURL}/collections/beacons/records", beacon);
         if (response.IsSuccessStatusCode)
         {
-           return true;
+            return true;
         }
         else
         {
@@ -103,9 +121,10 @@ public static class StorageManager
         }
     }
 
-    public async static Task<bool> DeleteBeaconFromDatabase(Beacon beacon){
+    public async static Task<bool> DeleteBeaconFromDatabase(Beacon beacon)
+    {
         var response = await HttpClient.DeleteAsync($"{PocketBaseURL}/collections/beacons/records/{beacon.Id}");
-        Logger.Log(logName,$"Deleted Beacon {beacon.Id}, Response : {response.StatusCode}");
+        Logger.Log(logName, $"Deleted Beacon {beacon.Id}, Response : {response.StatusCode}");
         return response.IsSuccessStatusCode;
     }
 
@@ -130,6 +149,7 @@ public static class StorageManager
     public static void SaveSettings(Hashtable _settings)
     {
         settings = _settings;
+        PocketBaseURL = new(Settings.GetSetting("DatabaseLocation"));
     }
 
 }

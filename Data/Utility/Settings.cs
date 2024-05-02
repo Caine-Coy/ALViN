@@ -110,7 +110,7 @@ public static class Settings
 
     }
 
-    public static void SetSetting(string setting, String Value)
+    public static void SetSetting(string setting, string Value)
     {
         if (List.ContainsKey(setting))
         {
